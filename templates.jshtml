@@ -1,0 +1,13 @@
+<!-- Row Container -->
+<section id="_mm_template-row" class="_mm_template">
+    <div class="row">
+    </div>
+</section>
+
+<!-- Slot -->
+<section id="_mm_template-slot" class="_mm_template">
+    <div class="col-xs-1">
+        <div class="slot js-square"></div>
+    </div>
+</section>
+

@@ -29,10 +29,10 @@ body>.container {
     display:block;
     height: 1px;
     border-radius:10000px;
-    background-color:#445;
+    background-color:#112;
     border: 1px solid #000;
 }
 .slot.full {
-    background-color:#aaf;
+    background-color:#779;
     border-width: 2px;
 }
