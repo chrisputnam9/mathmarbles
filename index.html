@@ -14,24 +14,69 @@
     MathMarbles.AddRow(
              
         // This function will be called at each
-        //  iteration of n.  Previous is tracked
-        //  to help with calculations.
-        function(n, prev) {
-            return
-
-                // Your formula goes here:
-                n
-                // end of formula
-                
-            ;
-        }
+        //  iteration of n.
+        function(n) {
+            return n;
+        },
 
         // Options can be added here
-        ,{
+        {
+            title: 'Count (r = n)'
         }
 
     );
-    // End AddRow section
+    // End First AddRow section
+
+    // Fibonacci Sequence
+    fibonacci_1 = 1;
+    fibonacci_2 = 1;
+    MathMarbles.AddRow(
+        function(n) {
+            if (n == 1) { return fibonacci_1; }
+            if (n == 2) { return fibonacci_2; }
+            var next = fibonacci_1 + fibonacci_2;
+            fibonacci_1 = fibonacci_2;
+            fibonacci_2 = next;
+            return next;
+        },
+        {
+            title: 'Fibonacci Sequence'
+        }
+    );
+
+    // Primes
+    last_prime = 0;
+    MathMarbles.AddRow(
+        function(n) { 
+            var test = last_prime + 1,
+                next_prime = false,
+                kill = Math.pow(2, 12);
+
+            while (!next_prime && test < kill) {
+                var test_limit = Math.floor(test/2),
+                    prime = true;
+
+                for (f=2;f<=test_limit;f++) {
+                    if (test % f == 0) {
+                        prime = false;
+                        break;
+                    }
+                }
+
+                if (prime) {
+                    next_prime = test;
+                }
+
+                test++;
+            }
+
+            last_prime = next_prime;
+            return next_prime;
+        },
+        {
+            title: 'Prime Numbers'
+        }
+    );
 
     // Set general options
     MathMarbles.UpdateOptions({

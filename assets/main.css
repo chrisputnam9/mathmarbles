@@ -25,6 +25,15 @@ body>.container {
     text-align: center;
     color: #fff;
 }
+.row {
+    padding: 0 0 20px;
+}
+.row-decimal {
+    display: block;
+    width: 100%;
+    font-size: 1.4em;
+    padding: 10px;
+}
 .slot {
     display:block;
     height: 1px;

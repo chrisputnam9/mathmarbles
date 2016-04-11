@@ -2,23 +2,23 @@ MathMarbles = (function(MM, $){
     // Doc Ready
     $(function() {
 
-        // Match height to width
-        $('.js-square').squarify();
-
         // Window Ready, and all JS has run
         $(window).load(function() {
 
             // Load templates
             //  hide loader when done
             MM.Templater.init(function () {
+
+                // Start the loop
+                MM.Loop.init();
+
+                // Match height to width
+                $('.js-square').squarify();
+
                 // Hide loading screen
                 $('.loadblock').fadeOut();
 
-                console.log(MM.Templater.templates);
             });
-
-            // Start the loop
-            MM.Loop.init();
 
         });
     });
@@ -39,34 +39,77 @@ MathMarbles = (function(MM, $){
 
         // Initialize - start loop
         init: function () {
-            this.looper = window.setInterval(this.increment, this.tick);
-            this.$container = $('#main-container');
+            var self = this;
+            self.$container = $('#main-container');
+            self.initRows();
+            self.looper = self.increment();
         },
 
         // Add a row of marbles
         addRow: function(formula, options) {
+            var self = this;
 
-            var $row = MM.Templater.get('row');
-
-            for (m=12;m>0;m--) {
-                var $slot = MM.Templater.get('slot');
-                console.log($slot);
-                $row.append($slot.addClass('slot--'+m));
-            }
-
-            this.$container.append($row);
-
-            this.rows.push({
+            self.rows.push({
                 formula: formula,
                 options: options,
-                $row: $row
             });
+        },
+
+        // Initialize Rows
+        initRows: function () {
+            var self = this,
+                row_count = self.rows.length;
+
+            for (i=0;i<row_count;i++) {
+                var $row = MM.Templater.get('row'),
+                    $title = MM.Templater.get('row-title'),
+                    $decimal = MM.Templater.get('row-decimal');
+
+                $title.html(self.rows[i].options.title);
+                $row.append($title);
+                $row.append($decimal);
+
+                for (m=self.marbles_per_row;m>0;m--) {
+                    var $slot = MM.Templater.get('slot');
+                    window.$slot = $slot;
+                    $row.append($slot.addClass('slot--'+m));
+                }
+
+                self.rows[i].$row = $row;
+
+                self.$container.append($row);
+
+            }
+
         },
 
         // Increment and update rows
         increment: function () {
             var self = MM.Loop;
+
             self.n++;
+            
+            $.each(self.rows, function (i, row) {
+                var result = row.formula(self.n),
+                    digits = binary(result, self.marbles_per_row);
+
+                row.$row.find('.slot').each(function (i) {
+                    var $slot = $(this),
+                        digit = digits[i];
+                    if (digit == '1') {
+                        $slot.addClass('full');
+                    } else {
+                        $slot.removeClass('full');
+                    }
+
+                });
+
+                row.$row.find('.row-decimal').html(result);
+
+            });
+
+            // continue the loop
+            self.looper = window.setTimeout(self.increment, self.tick);
         }
     };
 
@@ -86,7 +129,7 @@ MathMarbles = (function(MM, $){
                     var $template = $(this),
                         id = $template.attr('id').substr(13);
 
-                    self.templates[id] = $template;
+                    self.templates[id] = $template.children();
 
                 }, 'html');
 
@@ -96,9 +139,10 @@ MathMarbles = (function(MM, $){
 
         // Get template by ID
         get: function (id) {
-            console.log(id);
-            if (id in this.templates) {
-                return this.templates[id].clone();
+            var self = this;
+
+            if (id in self.templates) {
+                return self.templates[id].clone();
             }
 
             return "";
@@ -122,6 +166,17 @@ MathMarbles = (function(MM, $){
             $this.height(width);
         });
     };
+
+    // Convert number to array of binary digits in reverse
+    function binary(n, length) {
+        var digits = (parseInt(n, 10) >>> 0)
+            .toString(2)
+            .split('');
+        while (digits.length < length) {
+            digits.unshift('0');
+        }
+        return digits;
+    }
 
     return MM;
 }({}, jQuery));
