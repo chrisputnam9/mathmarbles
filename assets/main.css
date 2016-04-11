@@ -25,14 +25,23 @@ body>.container {
     text-align: center;
     color: #fff;
 }
+.row {
+    padding: 0 0 20px;
+}
+.row-decimal {
+    display: block;
+    width: 100%;
+    font-size: 1.4em;
+    padding: 10px;
+}
 .slot {
     display:block;
     height: 1px;
     border-radius:10000px;
-    background-color:#445;
+    background-color:#112;
     border: 1px solid #000;
 }
 .slot.full {
-    background-color:#aaf;
+    background-color:#779;
     border-width: 2px;
 }

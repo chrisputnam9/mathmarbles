@@ -3,59 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <title>Math Marbles</title>
-
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="./assets/main.css" />
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+    <script src="./assets/main.js"></script>
+    <script>
+
+    // Copy this whole section to add more rows
+    MathMarbles.AddRow(
+             
+        // This function will be called at each
+        //  iteration of n.
+        function(n) {
+            return n;
+        },
+
+        // Options can be added here
+        {
+            title: 'Count (r = n)'
+        }
+
+    );
+    // End First AddRow section
+
+    // Fibonacci Sequence
+    fibonacci_1 = 1;
+    fibonacci_2 = 1;
+    MathMarbles.AddRow(
+        function(n) {
+            if (n == 1) { return fibonacci_1; }
+            if (n == 2) { return fibonacci_2; }
+            var next = fibonacci_1 + fibonacci_2;
+            fibonacci_1 = fibonacci_2;
+            fibonacci_2 = next;
+            return next;
+        },
+        {
+            title: 'Fibonacci Sequence'
+        }
+    );
+
+    // Primes
+    last_prime = 0;
+    MathMarbles.AddRow(
+        function(n) { 
+            var test = last_prime + 1,
+                next_prime = false,
+                kill = Math.pow(2, 12);
+
+            while (!next_prime && test < kill) {
+                var test_limit = Math.floor(test/2),
+                    prime = true;
+
+                for (f=2;f<=test_limit;f++) {
+                    if (test % f == 0) {
+                        prime = false;
+                        break;
+                    }
+                }
+
+                if (prime) {
+                    next_prime = test;
+                }
+
+                test++;
+            }
+
+            last_prime = next_prime;
+            return next_prime;
+        },
+        {
+            title: 'Prime Numbers'
+        }
+    );
+
+    // Set general options
+    MathMarbles.UpdateOptions({
+
+    });
+
+    </script>
 </head>
 <body>
-    <div class="loadblock">
-        <h1>Loading...</h1>
-    </div>
+    <div class="loadblock"><h1>Loading...</h1></div>
     <script>$('.loadblock').show();</script>
-    <div class='container '>
-        <div class="row">
-            <div class="col-xs-1">
-                <div class="empty slot js-square"></div>
-            </div>
-            <div class="col-xs-1">
-                <div class="empty slot js-square"></div>
-            </div>
-            <div class="col-xs-1">
-                <div class="empty slot js-square"></div>
-            </div>
-            <div class="col-xs-1">
-                <div class="empty slot js-square"></div>
-            </div>
-            <div class="col-xs-1">
-                <div class="empty slot js-square"></div>
-            </div>
-            <div class="col-xs-1">
-                <div class="empty slot js-square"></div>
-            </div>
-            <div class="col-xs-1">
-                <div class="empty slot js-square"></div>
-            </div>
-            <div class="col-xs-1">
-                <div class="empty slot js-square"></div>
-            </div>
-            <div class="col-xs-1">
-                <div class="empty slot js-square"></div>
-            </div>
-            <div class="col-xs-1">
-                <div class="empty slot js-square"></div>
-            </div>
-            <div class="col-xs-1">
-                <div class="empty slot js-square"></div>
-            </div>
-            <div class="col-xs-1">
-                <div class="full slot gradient-radial js-square"></div>
-            </div>
-        </div>
-    </div>
-
-    <script src="./assets/footer.js"></script>
+    <div class='container' id='main-container'></div>
 </body>
 </html>
